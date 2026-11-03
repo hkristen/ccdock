@@ -679,7 +679,9 @@ def discover_sessions() -> list[SessionInfo]:
     seen_sids: set[str] = set()
 
     try:
-        proj_dirs = [p for p in projects_dir.iterdir() if p.is_dir()]
+        # Sorted, so which row wins when an id appears twice does not depend
+        # on the order the filesystem lists directories in.
+        proj_dirs = sorted(p for p in projects_dir.iterdir() if p.is_dir())
     except OSError:
         return []
 
@@ -729,8 +731,11 @@ def discover_sessions() -> list[SessionInfo]:
                 modified=_opt_str(entry.get("modified")),
             ))
 
-        # 2. Discover sessions from .jsonl files not in the index
-        for jsonl_path in proj_dir.glob("*.jsonl"):
+    # 2. Discover sessions from .jsonl files not in any index. This runs
+    # after every index is read: an index entry carries more than a bare
+    # transcript, so it wins when the same id shows up in both.
+    for proj_dir in proj_dirs:
+        for jsonl_path in sorted(proj_dir.glob("*.jsonl")):
             sid = jsonl_path.stem
             if sid in seen_sids or not jsonl_path.is_file():
                 continue
