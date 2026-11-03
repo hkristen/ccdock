@@ -1,0 +1,44 @@
+[project]
+name = "ccdock"
+version = "0.1.0"
+description = "Claude Code Session Manager TUI"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+authors = [{ name = "Harald Kristen" }]
+keywords = ["claude", "claude-code", "tmux", "tui", "session-manager"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: POSIX",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Terminals",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "textual>=8.0",
+    "rich>=14.2",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[project.urls]
+Homepage = "https://github.com/hkristen/ccdock"
+Issues = "https://github.com/hkristen/ccdock/issues"
+
+[project.scripts]
+ccdock = "ccdock.tui:main"
+
+[tool.setuptools]
+packages = ["ccdock"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["setuptools>=77.0"]
+build-backend = "setuptools.build_meta"
